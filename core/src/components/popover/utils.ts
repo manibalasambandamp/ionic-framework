@@ -320,6 +320,25 @@ export const getPrevItem = (items: HTMLIonItemElement[], currentItem: HTMLElemen
  */
 export const isTriggerElement = (el: HTMLElement) => el.hasAttribute('data-ion-popover-trigger');
 
+const focusItem = (item: HTMLIonItemElement) => {
+  const root = getElementRoot(item);
+  const innerButton = root.querySelector('button.item-native') as HTMLElement | null;
+
+  /**
+   * If `ion-item` has `button` property set,
+   * then we should focus the button element inside
+   * of the shadow root. Otherwise, just focus the
+   * root element
+   */
+  raf(() => {
+    if (innerButton) {
+      innerButton.focus();
+    } else {
+      item.focus();
+    }
+  });
+}
+
 export const configureKeyboardInteraction = (
   popoverEl: HTMLIonPopoverElement
 ) => {
@@ -365,7 +384,7 @@ export const configureKeyboardInteraction = (
         const nextItem = getNextItem(items, activeElement);
         // tslint:disable-next-line:strict-type-predicates
         if (nextItem !== undefined) {
-          nextItem.focus();
+          focusItem(nextItem);
         }
         break;
       /**
@@ -375,7 +394,7 @@ export const configureKeyboardInteraction = (
         const prevItem = getPrevItem(items, activeElement);
         // tslint:disable-next-line:strict-type-predicates
         if (prevItem !== undefined) {
-          prevItem.focus();
+          focusItem(prevItem);
         }
         break;
       /**
