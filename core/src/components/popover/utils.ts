@@ -314,6 +314,24 @@ export const getPrevItem = (items: HTMLIonItemElement[], currentItem: HTMLElemen
   return items[currentItemIndex - 1];
 }
 
+const getFocusableElement = (item?: HTMLIonItemElement) => {
+  if (item && item.shadowRoot) {
+    const button = item.shadowRoot.querySelector('button');
+    if (button) {
+      return button;
+    }
+  }
+
+  return item;
+}
+
+const focusItem = (item?: HTMLIonItemElement) => {
+  const el = getFocusableElement(item);
+  if (el) {
+    el.focus();
+  }
+}
+
 /**
  * Returns `true` if `el` has been designated
  * as a trigger element for an ion-popover.
@@ -363,20 +381,14 @@ export const configureKeyboardInteraction = (
        */
       case 'ArrowDown':
         const nextItem = getNextItem(items, activeElement);
-        // tslint:disable-next-line:strict-type-predicates
-        if (nextItem !== undefined) {
-          nextItem.focus();
-        }
+        focusItem(nextItem);
         break;
       /**
        * ArrowUp should move focus to the previous focusable ion-item.
        */
       case 'ArrowUp':
         const prevItem = getPrevItem(items, activeElement);
-        // tslint:disable-next-line:strict-type-predicates
-        if (prevItem !== undefined) {
-          prevItem.focus();
-        }
+        focusItem(prevItem);
         break;
       /**
        * ArrowRight, Spacebar, or Enter should activate
