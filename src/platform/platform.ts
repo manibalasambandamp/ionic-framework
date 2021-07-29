@@ -989,7 +989,11 @@ export class Platform {
           this._platforms.push('ipad');
           return;
         }
-
+        if ( this.navigatorPlatform() === 'MacIntel') {          
+          this._platforms.push('tablet');
+          this._platforms.push('MacIntel');
+          return;
+        }
         // set the array of active platforms with
         // the last one in the array the most important
         this._platforms.push(platformNode.name);
